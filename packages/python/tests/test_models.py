@@ -1,5 +1,4 @@
 """Tests for data models."""
-import pytest
 from argus.models import AggregatedReport, Finding, ScanResult, ScanType, Severity
 
 

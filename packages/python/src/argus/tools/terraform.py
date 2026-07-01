@@ -13,7 +13,6 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from pathlib import Path
 from typing import Any
 
 from argus.models import Finding, ScanResult, ScanType, Severity
@@ -283,7 +282,8 @@ async def run_kics_terraform(
         )
         return result
 
-    import tempfile, os
+    import os
+    import tempfile
     with tempfile.TemporaryDirectory() as tmpdir:
         report_file = os.path.join(tmpdir, "kics-report.json")
         cmd = [

@@ -1,7 +1,8 @@
 """Tests for SAST tool runners."""
 import json
-import pytest
 from unittest.mock import AsyncMock, patch
+
+import pytest
 
 from argus.models import ScanType, Severity
 from argus.tools.sast import run_bandit, run_semgrep

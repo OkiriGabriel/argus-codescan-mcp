@@ -5,10 +5,8 @@ Integrates: Semgrep, Bandit (Python), ESLint security plugin (JS/TS),
 """
 from __future__ import annotations
 
-import json
 import logging
 from pathlib import Path
-from typing import Any
 
 from argus.models import Finding, ScanResult, ScanType, Severity
 from argus.utils import (

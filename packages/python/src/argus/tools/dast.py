@@ -9,7 +9,6 @@ import asyncio
 import json
 import logging
 import os
-import time
 from typing import Any
 
 from argus.models import Finding, ScanResult, ScanType, Severity
@@ -53,14 +52,12 @@ async def run_zap_baseline(
         return await _run_zap_cli(target_url, zap_executable, timeout, output_file, extra_args, result)
 
     # Try python-owasp-zap-v2.4 library (requires ZAP running externally)
-    try:
-        from zapv2 import ZAPv2  # type: ignore
+    import importlib.util
+    if importlib.util.find_spec("zapv2") is not None:
         result.errors.append(
             "ZAP API library found but no running ZAP instance detected. "
             "Start ZAP with: docker run -p 8080:8080 ghcr.io/zaproxy/zaproxy:stable zap.sh -daemon -host 0.0.0.0 -port 8080"
         )
-    except ImportError:
-        pass
 
     result.tool_available = False
     result.errors.append(
@@ -84,8 +81,6 @@ async def _run_zap_docker(
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmpdir:
-        report_path = output_file or os.path.join(tmpdir, "zap-report.json")
-
         cmd = [
             "docker", "run", "--rm",
             "-v", f"{tmpdir}:/zap/wrk/:rw",

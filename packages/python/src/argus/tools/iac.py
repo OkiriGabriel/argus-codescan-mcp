@@ -83,7 +83,6 @@ async def run_checkov(
     results_list = data if isinstance(data, list) else [data]
 
     for res in results_list:
-        fw = res.get("check_type", framework or "unknown")
         failed_checks = res.get("results", {}).get("failed_checks", [])
 
         for check in failed_checks:
@@ -314,7 +313,7 @@ async def run_all_iac(
     # Add Terraform-specific scanners when .tf files are present
     has_tf = bool(list(target_path.rglob("*.tf"))[:1]) if target_path.is_dir() else target_path.suffix == ".tf"
     if has_tf:
-        from argus.tools.terraform import run_tfsec, run_tflint
+        from argus.tools.terraform import run_tflint, run_tfsec
         tasks.append(run_tfsec(target, timeout=timeout))
         tasks.append(run_tflint(target, timeout=min(timeout, 120)))
 

@@ -246,7 +246,8 @@ def _emit(report_dict: dict, fmt: str, output_file: str | None, min_sev: str, fa
     if fmt == "json":
         text = json.dumps(filtered, indent=2)
     elif fmt == "table":
-        import io, contextlib
+        import contextlib
+        import io
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             _print_table(filtered)
@@ -282,12 +283,15 @@ async def _run_scan(args: argparse.Namespace) -> int:
     print(f"Running {scan_type.upper()} scan on: {args.target}", file=sys.stderr)
 
     if scan_type == "sast":
-        from argus.tools.sast import run_all_sast, run_bandit, run_semgrep, run_eslint_security
+        from argus.tools.sast import run_all_sast, run_bandit, run_eslint_security, run_semgrep
         if tools:
-            tasks, results = [], []
-            if "semgrep" in tools: tasks.append(run_semgrep(args.target, config=args.semgrep_config, timeout=timeout))
-            if "bandit" in tools:  tasks.append(run_bandit(args.target, timeout=timeout))
-            if "eslint" in tools:  tasks.append(run_eslint_security(args.target, timeout=timeout))
+            tasks: list = []
+            if "semgrep" in tools:
+                tasks.append(run_semgrep(args.target, config=args.semgrep_config, timeout=timeout))
+            if "bandit" in tools:
+                tasks.append(run_bandit(args.target, timeout=timeout))
+            if "eslint" in tools:
+                tasks.append(run_eslint_security(args.target, timeout=timeout))
             results = await asyncio.gather(*tasks)
         else:
             results = await run_all_sast(args.target, semgrep_config=args.semgrep_config, timeout=timeout)
@@ -328,11 +332,11 @@ async def _run_scan(args: argparse.Namespace) -> int:
         results = [await run_trivy_image(args.target, timeout=timeout)]
 
     elif scan_type == "all":
+        from argus.tools.dast import run_all_dast
+        from argus.tools.iac import run_all_iac, run_trivy_image
         from argus.tools.sast import run_all_sast
         from argus.tools.sca import run_all_sca
         from argus.tools.secrets import run_all_secrets
-        from argus.tools.iac import run_all_iac, run_trivy_image
-        from argus.tools.dast import run_all_dast
 
         batches = await asyncio.gather(
             run_all_sast(args.target, timeout=timeout),

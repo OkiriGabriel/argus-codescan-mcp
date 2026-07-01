@@ -5,10 +5,8 @@ Integrates: Gitleaks, detect-secrets, TruffleHog.
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 from pathlib import Path
-from typing import Any
 
 from argus.models import Finding, ScanResult, ScanType, Severity
 from argus.utils import is_tool_available, parse_json_output, run_command

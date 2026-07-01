@@ -1,5 +1,4 @@
 """Tests for utility functions."""
-import pytest
 from argus.utils import format_markdown_report, is_tool_available, parse_json_output
 
 

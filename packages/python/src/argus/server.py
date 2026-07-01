@@ -9,8 +9,6 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-import os
-from pathlib import Path
 from typing import Any
 
 import mcp.server.stdio
@@ -18,7 +16,13 @@ import mcp.types as types
 from mcp.server import Server
 from mcp.server.models import InitializationOptions
 
-from argus.models import AggregatedReport, ScanType
+from argus.models import AggregatedReport
+from argus.tools.ansible import (
+    run_all_ansible,
+    run_ansible_lint,
+    run_checkov_ansible,
+    run_kics_ansible,
+)
 from argus.tools.dast import run_all_dast, run_nikto, run_zap_baseline
 from argus.tools.iac import (
     run_all_iac,
@@ -26,20 +30,6 @@ from argus.tools.iac import (
     run_terrascan,
     run_trivy_config,
     run_trivy_image,
-)
-from argus.tools.terraform import (
-    run_all_terraform,
-    run_checkov_terraform,
-    run_kics_terraform,
-    run_terraform_validate,
-    run_tfsec,
-    run_tflint,
-)
-from argus.tools.ansible import (
-    run_all_ansible,
-    run_ansible_lint,
-    run_checkov_ansible,
-    run_kics_ansible,
 )
 from argus.tools.sast import (
     run_all_sast,
@@ -59,6 +49,14 @@ from argus.tools.secrets import (
     run_detect_secrets,
     run_gitleaks,
     run_trufflehog,
+)
+from argus.tools.terraform import (
+    run_all_terraform,
+    run_checkov_terraform,
+    run_kics_terraform,
+    run_terraform_validate,
+    run_tfsec,
+    run_tflint,
 )
 from argus.utils import format_markdown_report, is_tool_available
 

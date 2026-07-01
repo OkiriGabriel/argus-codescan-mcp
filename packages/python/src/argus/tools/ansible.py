@@ -144,7 +144,6 @@ async def run_ansible_lint(
             if severity == Severity.MEDIUM:
                 severity = Severity.HIGH
 
-        task_info = v.get("task", {})
         finding = Finding(
             title=rule_id,
             severity=severity,
