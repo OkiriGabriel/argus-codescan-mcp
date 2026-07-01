@@ -1,4 +1,5 @@
 """Shared utilities for running external security tools."""
+
 from __future__ import annotations
 
 import asyncio
@@ -37,10 +38,12 @@ async def run_command(
             cwd=cwd,
             env=merged_env,
         )
-        stdout_bytes, stderr_bytes = await asyncio.wait_for(
-            proc.communicate(), timeout=timeout
+        stdout_bytes, stderr_bytes = await asyncio.wait_for(proc.communicate(), timeout=timeout)
+        return (
+            proc.returncode or 0,
+            stdout_bytes.decode(errors="replace"),
+            stderr_bytes.decode(errors="replace"),
         )
-        return proc.returncode or 0, stdout_bytes.decode(errors="replace"), stderr_bytes.decode(errors="replace")
     except asyncio.TimeoutError:
         logger.warning("Command timed out after %ds: %s", timeout, " ".join(args))
         return -1, "", f"Command timed out after {timeout}s"

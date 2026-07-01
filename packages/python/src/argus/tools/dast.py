@@ -3,6 +3,7 @@
 Integrates: OWASP ZAP (via python-owasp-zap-v2.4 or CLI),
             Nikto (web server scanner).
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -49,10 +50,13 @@ async def run_zap_baseline(
     # Try local zap.sh / zap-baseline.py
     zap_executable = zap_path or _find_zap_cli()
     if zap_executable:
-        return await _run_zap_cli(target_url, zap_executable, timeout, output_file, extra_args, result)
+        return await _run_zap_cli(
+            target_url, zap_executable, timeout, output_file, extra_args, result
+        )
 
     # Try python-owasp-zap-v2.4 library (requires ZAP running externally)
     import importlib.util
+
     if importlib.util.find_spec("zapv2") is not None:
         result.errors.append(
             "ZAP API library found but no running ZAP instance detected. "
@@ -82,12 +86,17 @@ async def _run_zap_docker(
 
     with tempfile.TemporaryDirectory() as tmpdir:
         cmd = [
-            "docker", "run", "--rm",
-            "-v", f"{tmpdir}:/zap/wrk/:rw",
+            "docker",
+            "run",
+            "--rm",
+            "-v",
+            f"{tmpdir}:/zap/wrk/:rw",
             "ghcr.io/zaproxy/zaproxy:stable",
             "zap-baseline.py",
-            "-t", target_url,
-            "-J", "zap-report.json",
+            "-t",
+            target_url,
+            "-J",
+            "zap-report.json",
             "-I",  # Don't fail on warnings
         ]
         if extra_args:
@@ -124,8 +133,10 @@ async def _run_zap_cli(
 
         cmd = [
             zap_executable,
-            "-t", target_url,
-            "-J", report_path,
+            "-t",
+            target_url,
+            "-J",
+            report_path,
             "-I",
         ]
         if extra_args:

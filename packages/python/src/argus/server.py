@@ -4,6 +4,7 @@ This server implements the Model Context Protocol (MCP) and exposes
 security scanning capabilities (SAST, DAST, SCA, Secrets, IaC) as
 MCP tools that AI assistants can call.
 """
+
 from __future__ import annotations
 
 import asyncio
@@ -69,6 +70,7 @@ server = Server("argus-scan")
 # ---------------------------------------------------------------------------
 # Tool definitions
 # ---------------------------------------------------------------------------
+
 
 @server.list_tools()
 async def list_tools() -> list[types.Tool]:
@@ -152,7 +154,10 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "tools": {
                         "type": "array",
-                        "items": {"type": "string", "enum": ["trivy", "safety", "pip-audit", "npm-audit"]},
+                        "items": {
+                            "type": "string",
+                            "enum": ["trivy", "safety", "pip-audit", "npm-audit"],
+                        },
                         "description": "Specific tools to run (default: all applicable)",
                     },
                     "timeout": {
@@ -179,7 +184,10 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "tools": {
                         "type": "array",
-                        "items": {"type": "string", "enum": ["gitleaks", "detect-secrets", "trufflehog"]},
+                        "items": {
+                            "type": "string",
+                            "enum": ["gitleaks", "detect-secrets", "trufflehog"],
+                        },
                         "description": "Specific tools to run (default: all available)",
                     },
                     "timeout": {
@@ -211,7 +219,10 @@ async def list_tools() -> list[types.Tool]:
                     },
                     "tools": {
                         "type": "array",
-                        "items": {"type": "string", "enum": ["checkov", "trivy-config", "terrascan"]},
+                        "items": {
+                            "type": "string",
+                            "enum": ["checkov", "trivy-config", "terrascan"],
+                        },
                         "description": "Specific tools to run (default: all available)",
                     },
                     "timeout": {
@@ -393,6 +404,7 @@ async def list_tools() -> list[types.Tool]:
 # Tool call handler
 # ---------------------------------------------------------------------------
 
+
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[types.TextContent]:
     """Dispatch tool calls to the appropriate scanner."""
@@ -430,6 +442,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[types.TextCont
 # Individual handlers
 # ---------------------------------------------------------------------------
 
+
 async def _handle_scan_sast(args: dict[str, Any]) -> list[types.TextContent]:
     target = args["target"]
     tools = args.get("tools")
@@ -454,7 +467,10 @@ async def _handle_scan_sast(args: dict[str, Any]) -> list[types.TextContent]:
     md = format_markdown_report(report_dict)
     return [
         types.TextContent(type="text", text=md),
-        types.TextContent(type="text", text=f"\n\n<details><summary>Raw JSON</summary>\n\n```json\n{json.dumps(report_dict, indent=2)}\n```\n\n</details>"),
+        types.TextContent(
+            type="text",
+            text=f"\n\n<details><summary>Raw JSON</summary>\n\n```json\n{json.dumps(report_dict, indent=2)}\n```\n\n</details>",
+        ),
     ]
 
 
@@ -778,9 +794,7 @@ async def _handle_check_tools() -> list[types.TextContent]:
         install = info["install"] if not available else "—"
         lines.append(f"| `{tool}` | {info['category']} | {status} | `{install}` |")
 
-    lines.append(
-        f"\n**{available_count}/{len(TOOLS_REGISTRY)} tools installed.**\n"
-    )
+    lines.append(f"\n**{available_count}/{len(TOOLS_REGISTRY)} tools installed.**\n")
 
     if available_count < len(TOOLS_REGISTRY):
         lines.append("\n## Quick Install (missing tools)\n")
@@ -811,6 +825,7 @@ async def _handle_get_scan_report(args: dict[str, Any]) -> list[types.TextConten
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
+
 
 async def main() -> None:
     """Run the MCP server over stdio."""
