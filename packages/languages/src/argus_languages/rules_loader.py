@@ -16,6 +16,8 @@ RULE_FILES = (
     "php.yaml",
     "terraform.yaml",
     "ansible.yaml",
+    "dart.yaml",
+    "flutter.yaml",
     "other.yaml",
 )
 

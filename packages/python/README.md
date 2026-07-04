@@ -19,17 +19,35 @@ Exposes the following **MCP tools** for use by any MCP-compatible AI client:
 
 ## Installation
 
+### Full suite
+
 ```bash
 pip install argus-scan
+pip install "argus-scan[all-tools]"   # optional: semgrep, bandit, checkov, ansible-lint…
 ```
 
-Install with all Python-native security tools:
+Includes **`argus-languages`** automatically (Java, PHP, Flutter, Terraform, Ansible built-in scanning).
+
+### Lightweight code scan only
 
 ```bash
-pip install "argus-scan[all-tools]"
+pip install argus-languages
+argus-languages scan /path/to/project
 ```
 
-## Usage
+## CLI usage (no MCP)
+
+```bash
+argus scan code /path/to/project     # built-in multi-language (argus-languages)
+argus scan sast /path/to/project     # + Semgrep, Bandit, ESLint if installed
+argus scan sca /path/to/project      # dependencies
+argus scan secrets /path/to/project
+argus scan iac /path/to/infra
+argus scan terraform /path/to/tf
+argus scan ansible /path/to/playbooks
+argus scan all /path/to/project --fail-on high
+argus tools
+```
 
 ### Run the MCP Server
 

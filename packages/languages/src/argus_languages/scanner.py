@@ -27,6 +27,8 @@ COMMENT_PREFIX: dict[str, tuple[str, ...]] = {
     "kubernetes": ("#",),
     "shell": ("#",),
     "sql": ("--", "/*"),
+    "dart": ("//",),
+    "flutter": ("#", "//", "<!--"),
 }
 
 

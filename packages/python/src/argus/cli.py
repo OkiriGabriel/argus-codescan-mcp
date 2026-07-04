@@ -4,7 +4,7 @@ Runs security scans directly from the terminal — no AI, no token,
 no subscription needed. Just Python + the open-source scanner tools.
 
 Usage:
-    argus scan code /path/to/project     # built-in Java, PHP, Terraform, Ansible, …
+    argus scan code /path/to/flutter-app   # Dart + Android/iOS Flutter config     # built-in Java, PHP, Terraform, Ansible, …
     argus scan sca  /path/to/project
     argus scan secrets /path/to/repo
     argus scan iac /path/to/infra
