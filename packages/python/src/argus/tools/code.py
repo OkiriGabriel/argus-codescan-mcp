@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import logging
 
-from argus.models import Finding, ScanResult, ScanType, Severity
 from argus_languages import scan_directory as _scan_directory
 from argus_languages.models import Severity as LangSeverity
+
+from argus.models import Finding, ScanResult, ScanType, Severity
 
 logger = logging.getLogger(__name__)
 

@@ -447,7 +447,7 @@ def _cmd_tools() -> None:
 
     print(f"\n{bold}Built-in (always available){reset}\n")
     print(f"  {green}✔{reset}  {'argus-languages':<20} Multi-language code (Java, PHP, Terraform, Ansible, …)")
-    print(f"       pip install argus-languages   or   argus scan code <path>")
+    print("       pip install argus-languages   or   argus scan code <path>")
 
     installed, missing = [], []
     for tool, (category, hint) in TOOLS.items():
