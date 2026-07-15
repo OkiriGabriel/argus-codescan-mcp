@@ -11,7 +11,24 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from argus.models import ScanResult
+
 logger = logging.getLogger(__name__)
+
+
+def collect_scan_results(
+    results: list[ScanResult | BaseException],
+    *,
+    label: str = "Scan tool",
+) -> list[ScanResult]:
+    """Filter asyncio.gather(..., return_exceptions=True) results for mypy-safe use."""
+    final: list[ScanResult] = []
+    for item in results:
+        if isinstance(item, ScanResult):
+            final.append(item)
+        elif isinstance(item, BaseException):
+            logger.exception("%s raised an exception: %s", label, item)
+    return final
 
 
 def is_tool_available(name: str) -> bool:

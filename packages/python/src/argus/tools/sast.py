@@ -11,6 +11,7 @@ from pathlib import Path
 
 from argus.models import Finding, ScanResult, ScanType, Severity
 from argus.utils import (
+    collect_scan_results,
     is_tool_available,
     parse_json_output,
     run_command,
@@ -341,10 +342,4 @@ async def run_all_sast(
         tasks.append(run_eslint_security(target, timeout=timeout))
 
     results = await asyncio.gather(*tasks, return_exceptions=True)
-    final: list[ScanResult] = []
-    for r in results:
-        if isinstance(r, Exception):
-            logger.exception("SAST tool raised an exception: %s", r)
-        else:
-            final.append(r)
-    return final
+    return collect_scan_results(results, label="SAST tool")
