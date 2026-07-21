@@ -61,7 +61,7 @@ async def _run_eslint_fix(file_path: str, timeout: int) -> tuple[bool, str]:
             str(path),
         ]
 
-    code, stdout, stderr = await run_command(cmd, cwd=path.parent, timeout=timeout)
+    code, stdout, stderr = await run_command(cmd, cwd=str(path.parent), timeout=timeout)
     output = (stdout + stderr).strip()
     if code not in (0, 1):
         return False, output or f"eslint --fix exited with code {code}"
